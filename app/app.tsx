@@ -44,11 +44,8 @@ const config = {
     Welcome: "welcome",
     Demo: {
       screens: {
-        DemoShowroom: {
-          path: "showroom/:queryIndex?/:itemIndex?",
-        },
+        LibraryList: "library",
         DemoDebug: "debug",
-        DemoPodcastList: "podcast",
         DemoCommunity: "community",
       },
     },
