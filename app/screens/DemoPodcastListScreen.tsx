@@ -31,6 +31,7 @@ import {
   Switch,
   Text,
 } from "@/components"
+import { isRTL, translate } from "../i18n"
 import { useStores } from "../models"
 import { Episode } from "../models/Episode"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
@@ -47,8 +48,8 @@ const rnrImage2 = require("../../assets/images/demo/rnr-image-2.png")
 const rnrImage3 = require("../../assets/images/demo/rnr-image-3.png")
 const rnrImages = [rnrImage1, rnrImage2, rnrImage3]
 
-export const LibraryScreen: FC<DemoTabScreenProps<"LibraryList">> = observer(
-  function LibraryScreen(_props) {
+export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = observer(
+  function DemoPodcastListScreen(_props) {
     const { episodeStore } = useStores()
     const { themed } = useAppTheme()
 
@@ -87,8 +88,16 @@ export const LibraryScreen: FC<DemoTabScreenProps<"LibraryList">> = observer(
               <EmptyState
                 preset="generic"
                 style={themed($emptyState)}
-                heading={episodeStore.favoritesOnly ? "No favorites found" : undefined}
-                content={episodeStore.favoritesOnly ? "You haven't favorited any episodes yet" : undefined}
+                headingTx={
+                  episodeStore.favoritesOnly
+                    ? "demoPodcastListScreen:noFavoritesEmptyState.heading"
+                    : undefined
+                }
+                contentTx={
+                  episodeStore.favoritesOnly
+                    ? "demoPodcastListScreen:noFavoritesEmptyState.content"
+                    : undefined
+                }
                 button={episodeStore.favoritesOnly ? "" : undefined}
                 buttonOnPress={manualRefresh}
                 imageStyle={$emptyStateImage}
@@ -98,7 +107,7 @@ export const LibraryScreen: FC<DemoTabScreenProps<"LibraryList">> = observer(
           }
           ListHeaderComponent={
             <View style={themed($heading)}>
-              <Text preset="heading" text="Library" />
+              <Text preset="heading" tx="demoPodcastListScreen:title" />
               {(episodeStore.favoritesOnly || episodeStore.episodesForList.length > 0) && (
                 <View style={themed($toggle)}>
                   <Switch
@@ -106,10 +115,10 @@ export const LibraryScreen: FC<DemoTabScreenProps<"LibraryList">> = observer(
                     onValueChange={() =>
                       episodeStore.setProp("favoritesOnly", !episodeStore.favoritesOnly)
                     }
-                    label="Only Favorites"
+                    labelTx="demoPodcastListScreen:onlyFavorites"
                     labelPosition="left"
                     labelStyle={$labelStyle}
-                    accessibilityLabel="Toggle favorites only"
+                    accessibilityLabel={translate("demoPodcastListScreen:accessibility.switch")}
                   />
                 </View>
               )}
@@ -185,14 +194,16 @@ const EpisodeCard = observer(function EpisodeCard({
       Platform.select<AccessibilityProps>({
         ios: {
           accessibilityLabel: episode.title,
-          accessibilityHint: `Long press to ${isFavorite ? "unfavorite" : "favorite"} this episode`,
+          accessibilityHint: translate("demoPodcastListScreen:accessibility.cardHint", {
+            action: isFavorite ? "unfavorite" : "favorite",
+          }),
         },
         android: {
           accessibilityLabel: episode.title,
           accessibilityActions: [
             {
               name: "longpress",
-              label: "Toggle favorite",
+              label: translate("demoPodcastListScreen:accessibility.favoriteAction"),
             },
           ],
           onAccessibilityAction: ({ nativeEvent }) => {
@@ -277,8 +288,8 @@ const EpisodeCard = observer(function EpisodeCard({
           style={themed([$favoriteButton, isFavorite && $unFavoriteButton])}
           accessibilityLabel={
             isFavorite
-              ? "Unfavorite"
-              : "Favorite"
+              ? translate("demoPodcastListScreen:accessibility.unfavoriteIcon")
+              : translate("demoPodcastListScreen:accessibility.favoriteIcon")
           }
           LeftAccessory={ButtonLeftAccessory}
         >
@@ -288,8 +299,8 @@ const EpisodeCard = observer(function EpisodeCard({
             weight="medium"
             text={
               isFavorite
-                ? "Unfavorite"
-                : "Favorite"
+                ? translate("demoPodcastListScreen:unfavoriteButton")
+                : translate("demoPodcastListScreen:favoriteButton")
             }
           />
         </Button>
@@ -370,6 +381,6 @@ const $emptyState: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 })
 
 const $emptyStateImage: ImageStyle = {
-  transform: [{ scaleX: 1 }],
+  transform: [{ scaleX: isRTL ? -1 : 1 }],
 }
 // #endregion
