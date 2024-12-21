@@ -94,6 +94,7 @@ const $baseStyle: ThemedStyle<TextStyle> = (theme) => ({
   ...$sizeStyles.sm,
   ...$fontWeightStyles.normal,
   color: theme.colors.text,
+  fontFamily: typography.primary.medium,
 })
 
 const $presets: Record<Presets, ThemedStyleArray<TextStyle>> = {
