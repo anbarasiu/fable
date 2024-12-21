@@ -42,34 +42,22 @@ export class Api {
   }
 
   /**
-   * Gets a list of recent React Native Radio episodes.
+   * Gets a list of books from local JSON file.
    */
-  async getEpisodes(): Promise<{ kind: "ok"; episodes: EpisodeSnapshotIn[] } | GeneralApiProblem> {
-    // make the api call
-    const response: ApiResponse<ApiFeedResponse> = await this.apisauce.get(
-      `api.json?rss_url=https%3A%2F%2Ffeeds.simplecast.com%2FhEI_f9Dx`,
-    )
-
-    // the typical ways to die when calling an api
-    if (!response.ok) {
-      const problem = getGeneralApiProblem(response)
-      if (problem) return problem
-    }
-
-    // transform the data into the format we are expecting
+  async getBooks(): Promise<{ kind: "ok"; books: any[] } | GeneralApiProblem> {
     try {
-      const rawData = response.data
+      // Import the local JSON file
+      const booksData = require("../../../content/books.json")
 
-      // This is where we transform the data into the shape we expect for our MST model.
-      const episodes: EpisodeSnapshotIn[] =
-        rawData?.items.map((raw) => ({
-          ...raw,
-        })) ?? []
+      // Transform the data if needed
+      const books = booksData.map((book: any) => ({
+        ...book,
+      }))
 
-      return { kind: "ok", episodes }
+      return { kind: "ok", books }
     } catch (e) {
       if (__DEV__ && e instanceof Error) {
-        console.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
+        console.error(`Bad data: ${e.message}`, e.stack)
       }
       return { kind: "bad-data" }
     }
