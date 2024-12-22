@@ -1,0 +1,19 @@
+{
+  "name": "scripts",
+  "version": "1.0.0",
+  "main": "epub-generator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "epub": "^1.2.1",
+    "fs": "^0.0.1-security",
+    "jszip": "^3.10.1",
+    "path": "^0.12.7"
+  }
+}

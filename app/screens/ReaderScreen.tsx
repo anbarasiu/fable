@@ -20,7 +20,8 @@ export function ReaderScreen({ navigation, route }: any) {
 	} = useAppTheme();
 
 	const { bookPath } = route.params
-	const fullBookPath = `https://www.gutenberg.org/ebooks/9977.epub`;
+	const fullBookPath = `file:///android_asset/books/panorama-einer-weltstadt.epub`;
+	console.log(fullBookPath)
 
 	const [selectedText, setSelectedText] = useState("")
 	const [isDrawerOpen, setDrawerOpen] = useState(false)
@@ -74,7 +75,7 @@ export function ReaderScreen({ navigation, route }: any) {
 			<ReaderProvider>
 				<SafeAreaView style={{ flex: 1 }}>
 					<Reader
-						src="https://www.gutenberg.org/ebooks/9977.epub"
+						src={fullBookPath}
 						fileSystem={useFileSystem}
 						onReady = {(e) => {console.log("Ready", e)}}
 						onLocationsReady = {(e) => {console.log("Started", e)}}
