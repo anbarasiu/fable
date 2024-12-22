@@ -31,6 +31,7 @@ import { ComponentProps } from "react"
 export type AppStackParamList = {
   Welcome: undefined
   Login: undefined
+  Reader: undefined
   Demo: NavigatorScreenParams<DemoTabParamList>
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
@@ -73,7 +74,7 @@ const AppStack = observer(function AppStack() {
       {isAuthenticated ? (
         <>
           <Stack.Screen name="Welcome" component={Screens.WelcomeScreen} />
-
+          <Stack.Screen name="Reader" component={Screens.ReaderScreen} />
           <Stack.Screen name="Demo" component={DemoNavigator} />
         </>
       ) : (

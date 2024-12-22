@@ -4,7 +4,6 @@ import {
   AccessibilityProps,
   ActivityIndicator,
   Image,
-  ImageSourcePropType,
   ImageStyle,
   Platform,
   StyleSheet,
@@ -37,13 +36,12 @@ import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import type { ThemedStyle } from "@/theme"
 import { $styles } from "../theme"
 import { delay } from "../utils/delay"
-import { openLinkInBrowser } from "../utils/openLinkInBrowser"
 import { useAppTheme } from "@/utils/useAppTheme"
 
 const ICON_SIZE = 14
 
 export const LibraryScreen: FC<DemoTabScreenProps<"LibraryList">> = observer(
-  function LibraryScreen(_props) {
+  function LibraryScreen({navigation}: any) {
     const { bookStore } = useStores()
     const { themed } = useAppTheme()
 
@@ -64,6 +62,10 @@ export const LibraryScreen: FC<DemoTabScreenProps<"LibraryList">> = observer(
       setRefreshing(true)
       await Promise.all([bookStore.fetchBooks(), delay(750)])
       setRefreshing(false)
+    }
+
+    const handlePressCard = (book: Book) => {
+      navigation.navigate("Reader", { bookPath: book.file_name })
     }
 
     return (
@@ -115,6 +117,7 @@ export const LibraryScreen: FC<DemoTabScreenProps<"LibraryList">> = observer(
               book={item}
               isFavorite={bookStore.hasFavorite(item)}
               onPressFavorite={() => bookStore.toggleFavorite(item)}
+              onPressCard = {handlePressCard}
             />
           )}
         />
@@ -127,9 +130,11 @@ const BookCard = observer(function BookCard({
   book,
   isFavorite,
   onPressFavorite,
+  onPressCard
 }: {
   book: Book
-  onPressFavorite: () => void
+  onPressFavorite: () => void,
+  onPressCard: (book: Book) => void,
   isFavorite: boolean
 }) {
   const {
@@ -197,10 +202,6 @@ const BookCard = observer(function BookCard({
     [book.title, handlePressFavorite, isFavorite],
   )
 
-  const handlePressCard = () => {
-    openLinkInBrowser(book.file_name)
-  }
-
   const ButtonLeftAccessory: ComponentType<ButtonAccessoryProps> = useMemo(
     () =>
       function ButtonLeftAccessory() {
@@ -239,7 +240,7 @@ const BookCard = observer(function BookCard({
     <Card
       style={themed($item)}
       verticalAlignment="force-footer-bottom"
-      onPress={handlePressCard}
+      onPress={() => onPressCard(book)}
       onLongPress={handlePressFavorite}
       HeadingComponent={
         <View style={[$styles.row, themed($metadata)]}>
@@ -375,4 +376,3 @@ const $emptyState: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 const $emptyStateImage: ImageStyle = {
   transform: [{ scaleX: 1 }],
 }
-// #endregion
