@@ -47,7 +47,7 @@ export class Api {
   async getBooks(): Promise<{ kind: "ok"; books: any[] } | GeneralApiProblem> {
     try {
       // Import the local JSON file
-      const booksData = require("../../../content/books.json")
+      const booksData = require("../../content/books.json")
 
       // Transform the data if needed
       const books = booksData.map((book: any) => ({

@@ -2,6 +2,11 @@
 #
 .DS_Store
 
+# Content generator
+scripts/dist/*
+scripts/node_modules/*
+scripts/*.txt
+
 # Xcode
 #
 build/
