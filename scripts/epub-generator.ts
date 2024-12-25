@@ -55,14 +55,20 @@ export async function prepareBatchFile(inputFilePath: string): Promise<string> {
         body: {
             model: 'gpt-4',
             messages: [
-                { role: 'system', content: 'You are a helpful assistant.' },
-                { role: 'user', content: `Translate the following German text to English and insert the English translation directly after each German sentence:\n\n${chunk}` }
+                { 
+                    role: 'system', 
+                    content: 'You are a helpful assistant skilled in translating and formatting text for bilingual reading.'
+                },
+                { 
+                    role: 'user', 
+                    content: `Take the following German text, translate the content into English sentence by sentence, and insert the English translation directly after each German sentence. Ensure the output keeps the German and English sentences paired together in an easily readable format.\n\nGerman text:\n\n${text}` 
+                }
             ],
             max_tokens: 2000 // Adjust as needed for longer texts
         }
     }));
 
-    const batchFilePath = path.join(path.dirname(inputFilePath), 'batchinput.jsonl');
+    const batchFilePath = path.join(path.dirname(inputFilePath), 'batchinput.json1');
     fs.writeFileSync(batchFilePath, requests.map(req => JSON.stringify(req)).join('\n'), 'utf8');
     return batchFilePath;
 }
