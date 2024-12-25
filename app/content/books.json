@@ -2,7 +2,7 @@
     {
         "guid": "book_001",
         "title": "Berlin — Panorama einer Weltstadt",
-        "file_name": "panorama-einer-weltstadt.epub",
+        "file_path": "https://fable-books.s3.ap-south-1.amazonaws.com/panorama-einer-weltstadt.epub",
         "author": "Karl Gutzkow",
         "cover": "https://www.gutenberg.org/cache/epub/9977/pg9977.cover.medium.jpg"
     }
