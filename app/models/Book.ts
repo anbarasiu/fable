@@ -1,9 +1,10 @@
 import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "./helpers/withSetPropAction"
+import { api } from "@/services/api";
 
-/**
- * This represents an episode of React Native Radio.
- */
+// Create an instance of the api class
+const apiInstance = new api();
+
 export const BookModel = types
   .model("Book")
   .props({

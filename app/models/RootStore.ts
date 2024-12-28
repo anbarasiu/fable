@@ -8,11 +8,15 @@ import { BookStoreModel } from "./BookStore"
  */
 export const RootStoreModel = types.model("RootStore").props({
   authenticationStore: types.optional(AuthenticationStoreModel, {}),
-  episodeStore: types.optional(EpisodeStoreModel, {}),
-  bookStore: types.optional(BookStoreModel, {})
+  bookStore: types.optional(BookStoreModel, {
+    books: [],
+    bookPath: "",
+    favorites: [],
+    favoritesOnly: false
+  })
 })
 
-/**
+/** 
  * The RootStore instance.
  */
 export interface RootStore extends Instance<typeof RootStoreModel> {}

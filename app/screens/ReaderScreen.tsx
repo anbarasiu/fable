@@ -4,9 +4,10 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import { Reader, ReaderProvider } from '@epubjs-react-native/core'
 import { useFileSystem } from "@epubjs-react-native/expo-file-system"
 import { useCallback, useEffect, useState } from "react"
-import { Platform, SafeAreaView, View, ViewStyle } from "react-native"
+import { ActivityIndicator, SafeAreaView, View, ViewStyle } from "react-native"
 import { WebViewMessageEvent } from "react-native-webview"
 import { $styles } from "../theme"
+import { useStores } from "@/models"
 
 // interface ReaderScreenProps {
 // 	navigation: NavigationProp
@@ -19,12 +20,12 @@ export function ReaderScreen({ navigation, route }: any) {
 		themed,
 	} = useAppTheme();
 
-	const { bookPath } = route.params
-	const fullBookPath = `file:///android_asset/books/panorama-einer-weltstadt.epub`;
-	console.log(fullBookPath)
+	const { book } = route.params
+	const { bookStore } = useStores()
 
 	const [selectedText, setSelectedText] = useState("")
 	const [isDrawerOpen, setDrawerOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
 	// Setup header buttons
 	useEffect(() => {
@@ -51,6 +52,16 @@ export function ReaderScreen({ navigation, route }: any) {
 		})
 	}, [isDrawerOpen, selectedText])
 
+
+    // Fetch the book path on load
+    useEffect(() => {
+		(async function load() {
+		  await bookStore.fetchBook(book)
+		  setIsLoading(false)
+		})()
+	  }, [bookStore])
+  
+
 	const handleMessage = useCallback((event: WebViewMessageEvent) => {
 		const data = JSON.parse(event.nativeEvent.data)
 		switch (data.type) {
@@ -74,14 +85,14 @@ export function ReaderScreen({ navigation, route }: any) {
 		>
 			<ReaderProvider>
 				<SafeAreaView style={{ flex: 1 }}>
-					<Reader
-						src={fullBookPath}
+					{isLoading ? <ActivityIndicator /> :  <Reader
+						src={bookStore.bookPath}
 						fileSystem={useFileSystem}
 						onReady = {(e) => {console.log("Ready", e)}}
 						onLocationsReady = {(e) => {console.log("Started", e)}}
 						onDisplayError={(e) => {console.log("Error loading", e)}}
 						flow="paginated"
-					/>
+					/>}
 				</SafeAreaView>
 			</ReaderProvider>
 		</Screen>

@@ -21,19 +21,6 @@ export interface EpisodeItem {
   categories: string[]
 }
 
-export interface ApiFeedResponse {
-  status: string
-  feed: {
-    url: string
-    title: string
-    link: string
-    author: string
-    description: string
-    image: string
-  }
-  items: EpisodeItem[]
-}
-
 /**
  * The options used to configure apisauce.
  */

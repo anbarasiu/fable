@@ -32,7 +32,7 @@ import {
 } from "@/components"
 import { useStores } from "../models"
 import { Book } from "../models/Book"
-import { DemoTabScreenProps } from "../navigators/DemoNavigator"
+import { DemoTabScreenProps } from "../navigators/TabNavigator"
 import type { ThemedStyle } from "@/theme"
 import { $styles } from "../theme"
 import { delay } from "../utils/delay"
@@ -50,7 +50,7 @@ export const LibraryScreen: FC<DemoTabScreenProps<"LibraryList">> = observer(
 
     // initially, kick off a background refresh without the refreshing UI
     useEffect(() => {
-      ;(async function load() {
+      (async function load() {
         setIsLoading(true)
         await bookStore.fetchBooks()
         setIsLoading(false)
@@ -64,8 +64,8 @@ export const LibraryScreen: FC<DemoTabScreenProps<"LibraryList">> = observer(
       setRefreshing(false)
     }
 
-    const handlePressCard = (book: Book) => {
-      navigation.navigate("Reader", { bookPath: book.file_name })
+    const handlePressCard =  async (book: Book) => {
+      navigation.navigate("Reader", { book })
     }
 
     return (
