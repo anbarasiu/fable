@@ -48,8 +48,7 @@ const config = {
           path: "showroom/:queryIndex?/:itemIndex?",
         },
         DemoDebug: "debug",
-        DemoPodcastList: "podcast",
-        DemoCommunity: "community",
+        DemoPodcastList: "podcast"
       },
     },
   },
