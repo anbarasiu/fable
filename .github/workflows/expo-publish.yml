@@ -1,19 +1,55 @@
 name: Publish to Google Play Store
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
-  release:
-    types: [published]
+  workflow_dispatch:
 
 jobs:
-  build:
+  generate_tag_and_changelog:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install git-chglog
+        run: |
+          curl -sSL https://github.com/git-chglog/git-chglog/releases/download/v0.15.1/git-chglog_0.15.1_linux_amd64.tar.gz | tar -xz -C /usr/local/bin
+
+      - name: Generate changelog
+        run: git-chglog -o CHANGELOG.md
+
+      - name: Commit and push changelog
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "chore: update changelog"
+          git push origin HEAD
+
+      - name: Create tag with semantic versioning
+        id: create_tag
+        run: |
+          npx semantic-release --no-ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish_for_testing:
+    needs: generate_tag_and_changelog
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -29,9 +65,44 @@ jobs:
       - name: Build Android app
         run: npx expo build:android --type app-bundle --non-interactive
 
-      - name: Upload to Google Play Store
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
+
+      - name: Submit to Google Play Store for internal testing
         env:
-          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: |
-          echo $GOOGLE_SERVICE_ACCOUNT_JSON > google-service-account.json
-          npx fastlane supply --aab $(ls ./android/app/build/outputs/bundle/release/*.aab) --json_key google-service-account.json --package_name com.fable --track production
+          eas submit --platform android --path $(ls ./android/app/build/outputs/bundle/release/*.aab) --type app-bundle --track internal
+
+  publish_to_play_store:
+    needs: publish_for_testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Log in to Expo
+        run: npx expo login -u ${{ secrets.EXPO_CLI_USERNAME }} -p ${{ secrets.EXPO_CLI_PASSWORD }}
+
+      - name: Build Android app
+        run: npx expo build:android --type app-bundle --non-interactive
+
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
+
+      - name: Submit to Google Play Store for production
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          eas submit --platform android --path $(ls ./android/app/build/outputs/bundle/release/*.aab) --type app-bundle --track production
