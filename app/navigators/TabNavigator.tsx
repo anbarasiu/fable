@@ -9,12 +9,9 @@ import type { ThemedStyle } from "@/theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 import { useAppTheme } from "@/utils/useAppTheme"
 
-export type DemoTabParamList = {
+export type TabParamList = {
   DemoCommunity: undefined
   LibraryList: { queryIndex?: string; itemIndex?: string }
-  DemoDebug: undefined
-  DemoPodcastList: undefined
-  EpubReader: { bookPath: string }
 }
 
 /**
@@ -22,21 +19,21 @@ export type DemoTabParamList = {
  *
  * More info: https://reactnavigation.org/docs/typescript/#organizing-types
  */
-export type DemoTabScreenProps<T extends keyof DemoTabParamList> = CompositeScreenProps<
-  BottomTabScreenProps<DemoTabParamList, T>,
+export type DemoTabScreenProps<T extends keyof TabParamList> = CompositeScreenProps<
+  BottomTabScreenProps<TabParamList, T>,
   AppStackScreenProps<keyof AppStackParamList>
 >
 
-const Tab = createBottomTabNavigator<DemoTabParamList>()
+const Tab = createBottomTabNavigator<TabParamList>()
 
 /**
  * This is the main navigator for the demo screens with a bottom tab bar.
  * Each tab is a stack navigator with its own set of screens.
  *
  * More info: https://reactnavigation.org/docs/bottom-tab-navigator/
- * @returns {JSX.Element} The rendered `DemoNavigator`.
+ * @returns {JSX.Element} The rendered `TabNavigator`.
  */
-export function DemoNavigator() {
+export function TabNavigator() {
   const { bottom } = useSafeAreaInsets()
   const {
     themed,
@@ -70,7 +67,7 @@ export function DemoNavigator() {
         name="DemoCommunity"
         component={DemoCommunityScreen}
         options={{
-          tabBarLabel: translate("demoNavigator:communityTab"),
+          tabBarLabel: translate("tabNavigator:communityTab"),
           tabBarIcon: ({ focused }) => (
             <Icon icon="community" color={focused ? colors.tint : colors.tintInactive} size={30} />
           ),

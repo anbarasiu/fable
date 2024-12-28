@@ -44,7 +44,7 @@ const ar: Translations = {
     tapToLogIn: "انقر لتسجيل الدخول!",
     hint: "(: تلميح: يمكنك استخدام اي عنوان بريد الكتروني وكلمة السر المفضلة لديك",
   },
-  demoNavigator: {
+  tabNavigator: {
     componentsTab: "عناصر",
     debugTab: "تصحيح",
     communityTab: "واصل اجتماعي",
