@@ -41,14 +41,9 @@ const config = {
     Login: {
       path: "",
     },
-    Welcome: "welcome",
-    Demo: {
+    App: {
       screens: {
-        DemoShowroom: {
-          path: "showroom/:queryIndex?/:itemIndex?",
-        },
-        DemoDebug: "debug",
-        DemoPodcastList: "podcast",
+        Library: "library",
         DemoCommunity: "community",
       },
     },
