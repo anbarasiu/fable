@@ -1,6 +1,6 @@
 module.exports = {
   branches: ["main"],
-  repositoryUrl: "https://github.com/fable-app/fable",
+  repositoryUrl: "https://github.com/fable-app/fable.git",
   plugins: [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
