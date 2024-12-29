@@ -23,7 +23,7 @@ jobs:
         id: create_tag
         run: npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
   publish_for_testing:
     needs: generate_tag_and_changelog
