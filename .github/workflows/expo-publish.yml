@@ -17,27 +17,11 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install -legacy-peer-deps
+        run: npm install --legacy-peer-deps
 
-      - name: Install git-chglog
-        run: |
-          curl -sSL https://github.com/git-chglog/git-chglog/releases/download/v0.15.1/git-chglog_0.15.1_linux_amd64.tar.gz | tar -xz -C /usr/local/bin
-
-      - name: Generate changelog
-        run: git-chglog -o CHANGELOG.md
-
-      - name: Commit and push changelog
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add CHANGELOG.md
-          git commit -m "chore: update changelog"
-          git push origin HEAD
-
-      - name: Create tag with semantic versioning
+      - name: Create tag and generate changelog with semantic versioning
         id: create_tag
-        run: |
-          npx semantic-release --no-ci
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -57,7 +41,7 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install -legacy-peer-deps
+        run: npm install --legacy-peer-deps
 
       - name: Log in to Expo
         run: npx expo login -u ${{ secrets.EXPO_CLI_USERNAME }} -p ${{ secrets.EXPO_CLI_PASSWORD }}
@@ -90,7 +74,7 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install -legacy-peer-deps
+        run: npm install --legacy-peer-deps
 
       - name: Log in to Expo
         run: npx expo login -u ${{ secrets.EXPO_CLI_USERNAME }} -p ${{ secrets.EXPO_CLI_PASSWORD }}

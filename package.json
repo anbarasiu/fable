@@ -73,6 +73,9 @@
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^9.2.6",
     "@testing-library/react-native": "^12.5.2",
     "@types/jest": "^29.2.1",
     "@types/react": "~18.3.12",
@@ -97,6 +100,7 @@
     "reactotron-react-js": "^3.3.11",
     "reactotron-react-native": "^5.0.5",
     "reactotron-react-native-mmkv": "^0.2.6",
+    "semantic-release": "^22.0.12",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.2",
     "typescript": "~5.3.3"
